@@ -10,29 +10,34 @@ public class Image {
 	// an enumeration representing the axis by which the image should be mirrored
 	// Private Attributes
 	private int[][] pixel;
-	private int[][] copy;
+	//private int[][] copy;
 	// a two-dimensional array of integers representing the grayscale pixel values (0 – 255)
 	private int width;
 	private int height;
 	// the width (number of columns) and height (number of rows) of the image
 	// Public Methods
 	public Image(int width, int height) { // constructor that creates a fully black (all 0s) image of the specified width and height
+		this.width = width;
+		this.height = height;
 		pixel = new int[width][height];
 		for (int i=0; i<width; i++) {
 			for (int j=0; j<height; j++) {
-				pixel[i][j] = 0;
+				pixel[i][j] = i;
 			}
 		}
 	}
 	
 	public Image(Image image) { // constructor that creates a deep copy of the image passed to it
-		
-		copy = new int[image.width][image.height];
+        width = image.getWidth();
+        height = image.getHeight();
+		pixel = new int[width][height];
+
 		for (int i=0; i<width; i++) {
 			for (int j=0; j<height; j++) {
-				copy[i][j] = image.getPixel(i,j);
+				pixel[i][j] = image.getPixel(i,j);
 			}
 		}
+		System.out.println(image.getPixel(142, 124));
 	}
 	
 	public int getWidth() {
@@ -42,23 +47,32 @@ public class Image {
 		return height;
 	}
 	public int getPixel(int row, int col) {
-		return pixel[row][col];
+		try {
+			return pixel[row][col];
+		}
+		catch (IndexOutOfBoundsException exception) {
+			return 0;
+		}
 	}
-	public void setPixel(int row, int col, int value) { 	// gets and sets the pixel at the specified row and column
-		//this[row][col] = value;	
+	public void setPixel(int row, int col, int value) { 
+		try {
+			pixel[row][col] = value;
+		}
+		catch (IndexOutOfBoundsException exception) {
+		}
 	}
 
 	public void shrink() { //needs better special cases for odd number of rows/columns/ out of bounds
-		int x;
+		int x=0;
 		int[][] smallImage = new int[width/2][height/2];
 		for (int i=0; i<width; i=i+2) {
 			for (int j=0; j<height; j=j+2) {
-				//try {
+				try {
 					x = (pixel[i][j]+pixel[i+1][j+1]+pixel[i][j+1]+pixel[i+1][j])%4;
-				//}
-				//catch (IndexOutOfBoundsException exception) {
+				}
+				catch (IndexOutOfBoundsException exception) {
 				//	x = pixel[i*2][j*2];
-				//}
+				}
 				smallImage[i][j]= x;
 			}
 			
@@ -70,46 +84,68 @@ public class Image {
 	public void invert() {
 		for (int i=0; i<width; i++) {
 			for (int j=0; j<height; j++) {
-				pixel[i][j]=255-pixel[i][j];
+				try {
+					this.setPixel(i,j,255-this.getPixel(i,j));
+				}
+				catch (IndexOutOfBoundsException exception){
+					this.setPixel(i,j,0);
+				}
 			}
 		}
-	
 	}
 	// creates the ?negative? of the image by replacing each pixel value with its
 	// inverted value. For example a pixel value of 0 would become 255, 
 	// 100 would become 155, and 200 would become 55.
-	public void mirror(Axis axis) {}
+	public void mirror(Axis axis) {
+		int y=this.getHeight();
+		int x=this.getWidth();
+		Image temp = new Image(y,x);
+		if (axis == Axis.HORIZONTAL) {
+			for (int i=0; i<x; i++) {
+				for (int j=0; j<y; j++) {
+					temp.setPixel((y-i),j,this.getPixel(i,j));
+				}
+			}
+		}
+		if (axis == Axis.VERTICAL) {
+			for (int i=0; i<x; i++) {
+				for (int j=0; j<y; j++) {
+					temp.setPixel(i,(x-j),this.getPixel(i,j));
+				}
+			}
+		}
+		for (int i=0; i<x; i++) {
+			for (int j=0; j<y; j++) {
+				this.setPixel(i,j,temp.getPixel(i,j));
+			}
+		}
+	}
 	// ?flips? the image about the specified axis. For instance, if the axis were vertical,
 	 // then the first column and last column would be swapped, the second and next-to-last 
 	 // columns would be swapped, etc.
 	 
 	public static void main(String[] args) {
-		BufferedImage img = null;
+		
+		
+		Image myImageB = new Image(100, 200);
 		try {
-			img = ImageIO.read(new File("strawberry.jpg"));
-		} 
-		catch (IOException e) {
-		}
-		
-		
-		
-		
-		Image myImage;
-		//Image myImage = new Image(255, 198);
-		try {
-			myImage = ImageUtilities.loadJPEG("test.jpg");
-			System.out.println(myImage.getPixel(142,124));
+			Image myImageA = new Image(ImageUtilities.loadJPEG("test.jpg"));
+			System.out.println("original" + myImageA.getPixel(142,124));
+			myImageA.invert();
+			System.out.println("inverse" + myImageA.getPixel(142, 124));
+			System.out.println("height " + myImageA.getHeight());
+			System.out.println("before mirror "+ myImageB.getPixel(5,5));
+			System.out.println("before mirror "+ myImageB.getPixel(95,195));
+			myImageB.mirror(Axis.HORIZONTAL);
+			//myImageB.mirror(Axis.VERTICAL);
+			System.out.println("mirrored "+ myImageB.getPixel(5,5));
+			System.out.println("mirrored "+ myImageB.getPixel(95,195));
 			}
 		catch (java.io.IOException e){
 			System.out.println("file not found.");
 		}
-		//myImage3 = Image(myImage2);
+
 		
-
-		//System.out.println(myImage2.getPixel(20,20));
-		// myImage.shrink();
-		// System.out.println(myImage.getPixel(1,2));
-
 		
 	}
 }
