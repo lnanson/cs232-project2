@@ -1,5 +1,5 @@
 /*Image
-This class represents a grayscale image. It is just a rectangular array of integers representing the pixel values. Three image manipulation methods should be provided—shrink, invert, and mirror.
+This class represents a grayscale image. It is just a rectangular array of integers representing the pixel values. Three image manipulation methods should be providedï¿½shrink, invert, and mirror.
 Public Attributes
 */
 import java.io.*;
@@ -34,7 +34,6 @@ public class Image {
 				pixel[i][j] = image.getPixel(i,j);
 			}
 		}
-		System.out.println(image.getPixel(142, 124));
 	}
 	
 	public int getWidth() {
@@ -44,15 +43,11 @@ public class Image {
 		return height;
 	}
 	public int getPixel(int row, int col) {
-		//if (this.getWidth()<row && this.getHeight()<col)
-			return pixel[row][col];
-		// else
-			// return 0;
+		return pixel[row][col];
 	}
 	
 	public void setPixel(int row, int col, int value) { 
-		//if (this.getWidth()<row && this.getHeight()<col)
-			pixel[row][col] = value;
+		pixel[row][col] = value;
 	}
 
 	public void shrink() { 
@@ -96,7 +91,6 @@ public class Image {
 			for (int i=0; i<y; i++) {
 				for (int j=0; j<x; j++) {
 					mirrored[i][x-j-1] = pixel[i][j];
-					//mirrored.setPixel(i,(x-j-1),this.getPixel(i,j));
 				}
 			}
 		}
@@ -109,29 +103,4 @@ public class Image {
 	// ?flips? the image about the specified axis. For instance, if the axis were vertical,
 	 // then the first column and last column would be swapped, the second and next-to-last 
 	 // columns would be swapped, etc.
-	 
-	// public static void main(String[] args) {
-		
-		
-		// Image myImageB = new Image(100, 200);
-		// try {
-			// Image myImageA = new Image(ImageUtilities.loadJPEG("test.jpg"));
-			// System.out.println("original" + myImageA.getPixel(142,124));
-			// myImageA.invert();
-			// System.out.println("inverse" + myImageA.getPixel(142, 124));
-			// System.out.println("height " + myImageA.getHeight());
-			// System.out.println("before mirror "+ myImageB.getPixel(0,2));
-			// System.out.println("before mirror "+ myImageB.getPixel(99,2));
-			// myImageB.mirror(Axis.HORIZONTAL);
-			// myImageB.mirror(Axis.VERTICAL);
-			// System.out.println("mirrored "+ myImageB.getPixel(99,2));
-			// System.out.println("mirrored "+ myImageB.getPixel(0,2));
-			// }
-		// catch (java.io.IOException e){
-			// System.out.println("file not found.");
-		// }
-
-		
-		
-	//}
 }
