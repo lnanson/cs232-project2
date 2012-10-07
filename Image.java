@@ -103,4 +103,59 @@ public class Image {
 	// ?flips? the image about the specified axis. For instance, if the axis were vertical,
 	 // then the first column and last column would be swapped, the second and next-to-last 
 	 // columns would be swapped, etc.
+	 
+	 public void darken() {
+		for (int i=0; i<this.height; i++) {
+			for (int j=0; j<this.width; j++) {
+				if (pixel[i][j] >=5)
+					pixel[i][j]=pixel[i][j]-5;
+				else
+					pixel[i][j]=0;
+			}
+		}
+	 }
+	 
+	 public void brighten() {
+		for (int i=0; i<this.height; i++) {
+			for (int j=0; j<this.width; j++) {
+				if (pixel[i][j] <=250)
+					pixel[i][j]=pixel[i][j]+5;
+				else
+					pixel[i][j]=255;
+			}
+		}
+	 }
+	
+	public void incContrast() {
+		for (int i=0; i<this.height; i++) {
+			for (int j=0; j<this.width; j++) {
+				if (pixel[i][j] <=85) {
+					if (pixel[i][j] >= 5)
+						pixel[i][j]=pixel[i][j]-5;
+					else
+						pixel[i][j] = 0;
+				}
+				if (pixel[i][j] >= 171) {
+					if (pixel[i][j] <=250)
+						pixel[i][j]=pixel[i][j]+5;
+					else
+						pixel[i][j] = 255;
+				
+				}
+			}
+		}
+	}
+	
+	public void decContrast() {
+		for (int i=0; i<this.height; i++) {
+			for (int j=0; j<this.width; j++) {
+				if (pixel[i][j] <= 85) {
+						pixel[i][j] = pixel[i][j]+5;
+				}
+				if (pixel[i][j] >= 171 {
+						pixel[i][j] = pixel[i][j]-5;	
+				}
+			}
+		}
+	}
 }
