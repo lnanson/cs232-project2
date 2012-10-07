@@ -1,3 +1,5 @@
+//couldnt get this to work without putting the code into the Project2 class. So this isnt being used anymore.
+
 import javax.swing.*;
 import javax.swing.event.*;
 public class ZoomControl extends JSlider implements ChangeListener{
